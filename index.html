@@ -646,6 +646,72 @@
       border-top: 1px solid var(--line);
     }
 
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 100;
+      transition: opacity .3s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--line);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .retry-banner {
+      display: none;
+      padding: 12px 18px;
+      background: rgba(255, 107, 95, .12);
+      border-bottom: 1px solid rgba(255, 107, 95, .3);
+      text-align: center;
+      color: var(--red);
+      font-size: 13px;
+    }
+
+    .retry-banner.visible {
+      display: block;
+    }
+
+    .retry-banner button {
+      margin-left: 12px;
+      padding: 6px 14px;
+      border: 1px solid var(--red);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--red);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .retry-banner button:hover {
+      background: var(--red);
+      color: var(--ink);
+    }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 28px 0;
@@ -729,6 +795,15 @@
   </style>
 </head>
 <body>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading rankings…</div>
+  </div>
+
+  <div class="retry-banner" id="retry-banner">
+    Failed to load ranking data. <button onclick="init()">Retry</button>
+  </div>
+
   <header class="topbar">
     <div class="shell nav">
       <a class="brand" href="#rankings" aria-label="LLM Signal home"><span class="mark" aria-hidden="true">S</span><span>LLM Signal</span></a>
@@ -1215,15 +1290,15 @@
         context.stroke();
       }
 
-      context.fillText("lower cost", pad.left, height - 16);
+      context.fillText("lower cost →", pad.left, height - 16);
       context.fillText("higher intelligence", 12, pad.top + 8);
 
       const colors = {
         OpenAI: "#5ad9a0",
         Anthropic: "#e5b567",
         Google: "#78a8ff",
-        xAI: "#ff6b5f",
-        Open: "#f4f1e8"
+        "xAI": "#ff6b5f",
+        Open: "#f4f1e8",
       };
 
       finite.forEach(model => {
@@ -1249,6 +1324,21 @@
           context.fillStyle = "rgba(244, 241, 232, .82)";
           context.fillText(model.name.slice(0, 18), clamp(x + 9, pad.left, width - 150), clamp(y + 4, 18, height - 22));
         });
+
+      // Legend
+      const legendX = pad.left + 8;
+      const legendY = pad.top + 10;
+      const legendEntries = Object.entries(colors);
+      context.font = "11px ui-sans-serif, system-ui";
+      legendEntries.forEach(([label, color], i) => {
+        const lx = legendX + i * 100;
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(lx + 5, legendY + 5, 4, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = "rgba(244, 241, 232, .7)";
+        context.fillText(label, lx + 13, legendY + 9);
+      });
     }
 
     function renderAll() {
@@ -1271,9 +1361,17 @@
       document.getElementById("comparison-table").innerHTML = `<div class="empty-state">No comparison data available.</div>`;
       document.getElementById("watch-list").innerHTML = `<div class="empty-state">No discovery data available.</div>`;
       document.getElementById("footer-copy").textContent = "Ranking metadata unavailable.";
+      document.getElementById("retry-banner").classList.add("visible");
+    }
+
+    function hideLoading() {
+      const overlay = document.getElementById("loading-overlay");
+      overlay.classList.add("hidden");
+      setTimeout(() => overlay.remove(), 400);
     }
 
     async function init() {
+      document.getElementById("retry-banner").classList.remove("visible");
       try {
         const response = await fetch("data/rankings.json", { cache: "no-store" });
         if (!response.ok) throw new Error(`rankings.json HTTP ${response.status}`);
@@ -1285,6 +1383,8 @@
       } catch (error) {
         console.error("Failed to load automated ranking data", error);
         renderError(error);
+      } finally {
+        hideLoading();
       }
     }
 

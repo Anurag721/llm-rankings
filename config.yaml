@@ -1,0 +1,52 @@
+# LLM Signal Configuration
+# All thresholds and tuning knobs live here instead of hardcoded in scripts.
+
+pipeline:
+  # OpenRouter API
+  openrouter_url: "https://openrouter.ai/api/v1/models"
+  user_agent: "LLMSignalBot/1.0"
+
+  # Freshness policy (hours)
+  stale_after_hours: 24
+  review_after_hours: 168
+
+  # Discovery
+  discovery_limit: 12
+
+  # Ranking thresholds
+  intelligence_cutoff_for_value: 83          # minimum intel to qualify for value ranking
+  max_ranked_results: 6                      # number of models per ranking list
+  value_blend_ratio: 0.55                    # seed weight vs benchmark signal weight
+  benchmark_signal_ratio: 0.45
+  min_cost_for_value: 0.05                   # floor cost to avoid division issues
+
+  # HTTP
+  fetch_timeout_seconds: 30
+  text_fetch_timeout_seconds: 20
+  max_retries: 3
+  retry_backoff_seconds: 2
+
+benchmark_sources:
+  - id: artificial-analysis
+    label: "Artificial Analysis LLM leaderboards"
+    url: "https://artificialanalysis.ai/leaderboards/models"
+    type: benchmark-index
+  - id: lmarena
+    label: "LMArena leaderboard"
+    url: "https://lmarena.ai/leaderboard"
+    type: human-preference
+  - id: openrouter-rankings
+    label: "OpenRouter rankings"
+    url: "https://openrouter.ai/rankings"
+    type: usage-community
+
+frontier_detection:
+  # Regex patterns for identifying frontier-scale models in OpenRouter catalog
+  parameter_pattern: '\b(?:[1-9]\d{2,}(?:\.\d+)?\s*B|[1-9](?:\.\d+)?\s*T)\b'
+  signal_pattern: '\b(frontier|flagship|reasoning|agentic|coding agent|foundation model|large language model)\b'
+  providers: ["anthropic", "google", "openai", "x-ai"]
+
+paths:
+  candidates: "data/candidates.json"
+  output: "data/rankings.json"
+  cache_dir: "data/.cache"
