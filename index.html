@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Frontier LLM Rankings — Intelligence, Value, Cheap</title>
+  <meta name="description" content="A clean ranking site for large LLMs above 100B parameters: most intelligent, cost-efficient, and cheapest options." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#08090a; --panel:#0f1011; --surface:#17181a; --surface2:#1d1f23;
+      --text:#f7f8f8; --muted:#8a8f98; --soft:#d0d6e0; --subtle:#62666d;
+      --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.05);
+      --accent:#7170ff; --accent2:#5e6ad2; --green:#10b981; --amber:#f59e0b; --red:#ef4444;
+      --shadow: 0 24px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(113,112,255,.16),transparent 32rem),radial-gradient(circle at 80% 8%,rgba(16,185,129,.09),transparent 28rem),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-feature-settings:"cv01","ss03";}
+    a{color:inherit} .mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto}
+    header{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line2);backdrop-filter:blur(18px);background:rgba(8,9,10,.72)}
+    .nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:590;letter-spacing:-.18px}.logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#9ca3ff);display:grid;place-items:center;box-shadow:0 0 42px rgba(113,112,255,.35)}
+    .logo svg{width:20px}.links{display:flex;align-items:center;gap:18px;color:var(--soft);font-size:13px;font-weight:510}.links a{text-decoration:none}.links a:hover{color:var(--text)}
+    .btn{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--soft);padding:9px 13px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:510;cursor:pointer}.btn.primary{background:var(--accent2);border-color:rgba(255,255,255,.14);color:#fff}.btn:hover{border-color:rgba(255,255,255,.16);color:#fff}
+    .hero{padding:84px 0 42px;text-align:center}.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--soft);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:510}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 16px var(--green)}
+    h1{font-size:clamp(42px,7vw,76px);line-height:.96;margin:22px auto 18px;letter-spacing:-1.5px;font-weight:510;max-width:980px}.lead{max-width:760px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.65;letter-spacing:-.16px}
+    .hero-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px}.statbar{margin:42px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:920px}.stat{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:14px;padding:16px}.stat b{display:block;font-size:24px;letter-spacing:-.5px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+    section{padding:56px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{font-size:32px;line-height:1.1;margin:0;font-weight:510;letter-spacing:-.7px}.section-head p{margin:8px 0 0;color:var(--muted);max-width:690px;line-height:1.6}.controls{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--soft);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:510;cursor:pointer}.chip.active,.chip:hover{background:rgba(113,112,255,.14);border-color:rgba(113,112,255,.48);color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:18px;padding:18px;box-shadow:var(--shadow);min-height:288px}.card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--accent),transparent);opacity:.9}.rank{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.rankno{font-size:12px;color:var(--soft);border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:999px;padding:5px 8px}.pill{font-size:11px;color:var(--soft);background:rgba(255,255,255,.05);border:1px solid var(--line2);padding:5px 7px;border-radius:999px}.name{font-size:21px;font-weight:590;letter-spacing:-.35px;margin:0 0 6px}.provider{color:var(--muted);font-size:13px;margin-bottom:14px}.scoreline{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.metric{background:rgba(0,0,0,.22);border:1px solid var(--line2);border-radius:12px;padding:10px}.metric label{display:block;color:var(--subtle);font-size:11px;margin-bottom:5px}.metric b{font-size:18px}.bar{height:7px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:var(--w)}
+    .notes{color:var(--muted);font-size:13px;line-height:1.55;margin:12px 0 0}.sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.sources a{font-size:11px;color:var(--soft);text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:5px 7px;background:rgba(255,255,255,.025)}.sources a:hover{border-color:var(--accent);color:#fff}
+    .method{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.panel{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h3{margin:0 0 10px;font-size:20px;font-weight:590;letter-spacing:-.25px}.panel p,.panel li{color:var(--muted);line-height:1.65}.panel ul{margin:8px 0 0;padding-left:18px}.source-list{display:grid;gap:8px}.source-list a{display:flex;justify-content:space-between;gap:10px;align-items:center;text-decoration:none;border:1px solid var(--line2);background:rgba(255,255,255,.025);border-radius:12px;padding:11px;color:var(--soft);font-size:13px}.source-list span{color:var(--subtle);font-size:11px}.source-list a:hover{border-color:rgba(113,112,255,.48)}
+    .table{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.02)}.row{display:grid;grid-template-columns:44px 1.2fr .8fr .8fr .8fr 1fr;gap:10px;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line2);font-size:13px}.row.head{color:var(--subtle);font-size:11px;text-transform:uppercase;letter-spacing:.08em;background:rgba(255,255,255,.025)}.row:last-child{border-bottom:0}.row strong{font-weight:590}.muted{color:var(--muted)}
+    footer{padding:40px 0 60px;color:var(--subtle);font-size:12px;border-top:1px solid var(--line2)}
+    @media(max-width:900px){.grid,.method,.statbar{grid-template-columns:1fr 1fr}.row{grid-template-columns:36px 1.4fr .8fr .8fr}.row .hide-sm{display:none}.links{display:none}.hero{text-align:left}.hero-actions{justify-content:flex-start}}
+    @media(max-width:620px){.grid,.method,.statbar{grid-template-columns:1fr}.section-head{display:block}.row{grid-template-columns:32px 1fr .7fr}.row .hide-xs{display:none}h1{letter-spacing:-.9px}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav"><div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 16.5 9.7 6.8l4.2 7.1 2.2-3.8L20 16.5H4Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg></div><span>LLM Signal</span></div><nav class="links"><a href="#intelligence">Intelligence</a><a href="#value">Cost-efficient</a><a href="#cheap">Cheap</a><a href="#sources">Sources</a></nav><a class="btn primary" href="#rankings">View rankings</a></div></header>
+  <main>
+    <section class="hero wrap"><div class="eyebrow"><span class="dot"></span> Large-model rankings for 100B+ / frontier-scale LLMs</div><h1>Find the smartest, best-value, and cheapest big LLMs without the noise.</h1><p class="lead">A curated comparison built for teams choosing serious LLMs. It combines official provider pages, OpenRouter pricing, and public benchmark leaders into three practical rankings.</p><div class="hero-actions"><a class="btn primary" href="#intelligence">Most intelligent</a><a class="btn" href="#value">Intelligent but cheap</a><a class="btn" href="#cheap">Lowest cost</a></div><div class="statbar"><div class="stat"><b>100B+</b><span>public parameter floor where available</span></div><div class="stat"><b>3</b><span>decision-ready rankings</span></div><div class="stat"><b>$/M</b><span>normalized token pricing</span></div><div class="stat"><b>Live-ready</b><span>designed to refresh from sources</span></div></div></section>
+
+    <section id="rankings" class="wrap"><div class="section-head"><div><h2>Rankings snapshot</h2><p>Scores are generated by the ingestion pipeline: OpenRouter supplies live pricing and context, official provider pages document model identity, and benchmark adapters track Artificial Analysis, LMArena, and OpenRouter rankings.</p></div><div class="controls" id="filters"><button class="chip active" data-provider="all">All</button><button class="chip" data-provider="OpenAI">OpenAI</button><button class="chip" data-provider="Anthropic">Anthropic</button><button class="chip" data-provider="Google">Google</button><button class="chip" data-provider="xAI">xAI</button><button class="chip" data-provider="Open">Open / OSS</button></div></div></section>
+
+    <section id="intelligence" class="wrap"><div class="section-head"><div><h2>1. Most intelligent</h2><p>Best when quality matters more than price: hard reasoning, coding, agentic workflows, and complex enterprise tasks.</p></div></div><div class="grid" data-list="intelligence"></div></section>
+
+    <section id="value" class="wrap"><div class="section-head"><div><h2>2. Cost-efficient intelligence</h2><p>Models that stay near frontier quality while keeping blended token cost sane. This is often the best production shortlist.</p></div></div><div class="grid" data-list="value"></div></section>
+
+    <section id="cheap" class="wrap"><div class="section-head"><div><h2>3. Cheap big models</h2><p>Lowest-cost 100B+ options for routing, summarization, extraction, bulk analysis, and non-critical workloads.</p></div></div><div class="grid" data-list="cheap"></div></section>
+
+    <section class="wrap"><div class="section-head"><div><h2>Complete comparison table</h2><p>Use this to compare all included models across quality, cost, parameter status, and context window.</p></div></div><div class="table" id="table"></div></section>
+
+    <section id="sources" class="wrap"><div class="method"><div class="panel"><h3>Methodology</h3><ul><li><b>Scope:</b> primarily 100B+ public models and closed frontier models whose exact parameter counts are not disclosed but are clearly positioned as flagship large LLMs.</li><li><b>Intelligence index:</b> generated from a curated benchmark-consensus seed and blended with machine-readable benchmark signals when adapters expose stable scores.</li><li><b>Cost:</b> OpenRouter API pricing converted to dollars per million tokens. Blended cost = input $/M + output $/M.</li><li><b>Value index:</b> intelligence score divided by blended cost, then normalized for readability. Very low-cost models can rank high only if their intelligence score remains competitive.</li><li><b>Warning:</b> benchmark rankings move fast. Treat this as a website foundation with visible source links, not a permanent truth table.</li></ul></div><div class="panel"><h3>Primary sources to monitor</h3><div class="source-list"><a href="https://openrouter.ai/api/v1/models" target="_blank">OpenRouter model/pricing API <span>pricing</span></a><a href="https://openrouter.ai/rankings" target="_blank">OpenRouter rankings <span>usage + community</span></a><a href="https://artificialanalysis.ai/leaderboards/models" target="_blank">Artificial Analysis LLM leaderboards <span>benchmark index</span></a><a href="https://lmarena.ai/leaderboard" target="_blank">LMArena leaderboard <span>human preference</span></a><a href="https://openai.com/api/pricing/" target="_blank">OpenAI API pricing <span>official</span></a><a href="https://docs.anthropic.com/en/docs/about-claude/models/overview" target="_blank">Anthropic Claude model docs <span>official</span></a><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank">Google Gemini pricing <span>official</span></a><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank">DeepSeek API pricing <span>official</span></a><a href="https://docs.x.ai/docs/models" target="_blank">xAI model docs <span>official</span></a><a href="https://qwenlm.github.io/" target="_blank">Qwen official model pages <span>official</span></a><a href="https://www.llama.com/models/" target="_blank">Meta Llama models <span>official</span></a><a href="https://platform.moonshot.ai/docs/pricing" target="_blank">Moonshot / Kimi pricing <span>official</span></a></div></div></div></section>
+  </main>
+  <footer><div class="wrap">Snapshot generated for a fast-moving space. Recheck official provider pages before procurement, rate-card negotiation, or production routing decisions.</div></footer>
+  <script>
+    let models = [];
+    let rankings = { intelligence: [], value: [], cheap: [], value_index: {} };
+    const byId = id => models.find(m => m.id === id);
+    const fmt = n => Number.isFinite(Number(n)) ? Number(n).toFixed(Number(n) < 1 ? 3 : 2).replace(/\.00$/, '') : 'n/a';
+    const sourceUrl = s => typeof s === 'string' ? s : s.url;
+    const sourceText = s => typeof s === 'string' ? sourceLabel(s) : (s.label || sourceLabel(s.url));
+    const sourceLabel = u => {
+      try { return new URL(u).hostname.replace('www.','').split('.')[0]; }
+      catch { return 'source'; }
+    };
+    function normalizeModel(m){
+      return {
+        ...m,
+        group: m.provider_group,
+        params: m.parameter_note,
+        ctx: m.context,
+        intel: m.intelligence,
+        inCost: m.input_per_million,
+        outCost: m.output_per_million,
+        cost: m.blended_per_million,
+        value: m.value_index || rankings.value_index?.[m.id] || 0,
+      };
+    }
+    function card(m, idx, mode){
+      const topMetric = mode==='cheap' ? `$${fmt(m.cost)}` : mode==='value' ? m.value : m.intel;
+      const topLabel = mode==='cheap' ? 'blended $/M' : mode==='value' ? 'value index' : 'intelligence';
+      const bar = mode==='cheap' ? Math.max(8, 100 - Math.min(95, Number(m.cost)/2)) : (mode==='value'?m.value:m.intel);
+      const src = (m.sources || []).slice(0,3).map(s=>`<a href="${sourceUrl(s)}" target="_blank" rel="noopener">${sourceText(s)}</a>`).join('');
+      return `<article class="card" data-provider="${m.group}"><div class="rank"><span class="rankno mono">#${idx+1}</span><span class="pill">${m.params}</span></div><h3 class="name">${m.name}</h3><div class="provider">${m.provider} · context ${m.ctx || 'Unknown'}</div><div class="scoreline"><div class="metric"><label>${topLabel}</label><b>${topMetric}</b><div class="bar"><i style="--w:${bar}%"></i></div></div><div class="metric"><label>input / output</label><b>$${fmt(m.inCost)} / $${fmt(m.outCost)}</b><div class="muted mono" style="font-size:11px;margin-top:5px">per 1M tokens</div></div></div><p class="notes">${m.note}</p><div class="sources">${src}</div></article>`
+    }
+    function ranked(ids, fallbackSort){
+      const list = (ids || []).map(byId).filter(Boolean);
+      return list.length ? list : [...models].sort(fallbackSort).slice(0,6);
+    }
+    function render(provider='all'){
+      const filter = arr => provider==='all' ? arr : arr.filter(m=>m.group===provider);
+      const intelligence = filter(ranked(rankings.intelligence, (a,b)=>b.intel-a.intel));
+      const value = filter(ranked(rankings.value, (a,b)=>b.value-a.value));
+      const cheap = filter(ranked(rankings.cheap, (a,b)=>a.cost-b.cost));
+      document.querySelector('[data-list="intelligence"]').innerHTML = intelligence.map((m,i)=>card(m,i,'intelligence')).join('') || empty();
+      document.querySelector('[data-list="value"]').innerHTML = value.map((m,i)=>card(m,i,'value')).join('') || empty();
+      document.querySelector('[data-list="cheap"]').innerHTML = cheap.map((m,i)=>card(m,i,'cheap')).join('') || empty();
+      const rows = filter([...models].sort((a,b)=>b.intel-a.intel));
+      document.getElementById('table').innerHTML = `<div class="row head"><div>#</div><div>Model</div><div class="hide-xs">Provider</div><div>Intel</div><div class="hide-sm">Blended</div><div class="hide-sm">Params</div></div>` + rows.map((m,i)=>`<div class="row"><div class="mono muted">${i+1}</div><div><strong>${m.name}</strong><div class="muted">${m.ctx} context</div></div><div class="hide-xs">${m.provider}</div><div>${m.intel}</div><div class="hide-sm">$${fmt(m.cost)}/M</div><div class="hide-sm muted">${m.params}</div></div>`).join('');
+    }
+    function renderSourceStatus(payload){
+      const footer = document.querySelector('footer .wrap');
+      if (!footer || !payload.generated_at) return;
+      const ok = (payload.source_status || []).filter(s => ['fetched','cached'].includes(s.status)).length;
+      footer.innerHTML = `Automated ingestion generated this snapshot at <span class="mono">${payload.generated_at}</span>. Sources healthy: ${ok}/${(payload.source_status || []).length}. Recheck official provider pages before procurement, rate-card negotiation, or production routing decisions.`;
+    }
+    function empty(){return '<div class="panel"><p>No models match this filter.</p></div>'}
+    async function init(){
+      try {
+        const payload = await fetch('data/rankings.json', {cache: 'no-store'}).then(r => {
+          if (!r.ok) throw new Error(`rankings.json HTTP ${r.status}`);
+          return r.json();
+        });
+        rankings = payload.rankings || rankings;
+        models = (payload.models || []).map(normalizeModel);
+        renderSourceStatus(payload);
+        render();
+      } catch (error) {
+        console.error('Failed to load automated ranking data', error);
+        document.querySelector('[data-list="intelligence"]').innerHTML = `<div class="panel"><p>Automated ranking data failed to load: ${error.message}</p></div>`;
+      }
+    }
+    document.getElementById('filters').addEventListener('click', e=>{if(!e.target.matches('button'))return;document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');render(e.target.dataset.provider)});
+    init();
+  </script>
+</body>
+</html>

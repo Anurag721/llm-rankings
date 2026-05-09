@@ -1,0 +1,494 @@
+{
+  "generated_at": "2026-05-09T07:58:14+00:00",
+  "methodology": {
+    "cost": "OpenRouter prompt/completion pricing normalized to dollars per million tokens. Blended = input + output.",
+    "intelligence": "Curated benchmark-consensus seed, blended with machine-readable benchmark signals when available from adapters.",
+    "value": "Normalized intelligence per blended dollar, with low-cost models capped by their intelligence score."
+  },
+  "models": [
+    {
+      "blended_per_million": 135.0,
+      "context": "400K",
+      "context_length": 400000,
+      "id": "openai-gpt-5-pro",
+      "input_per_million": 15.0,
+      "intelligence": 98,
+      "knowledge_cutoff": "2024-09-30",
+      "name": "GPT-5 Pro",
+      "note": "Top-tier reasoning and coding choice when price is secondary.",
+      "openrouter_id": "openai/gpt-5-pro",
+      "output_per_million": 120.0,
+      "parameter_note": "Undisclosed frontier-scale",
+      "provider": "OpenAI",
+      "provider_group": "OpenAI",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/openai/gpt-5-pro"
+        },
+        {
+          "label": "OpenAI pricing",
+          "url": "https://openai.com/api/pricing/"
+        },
+        {
+          "label": "OpenAI models",
+          "url": "https://platform.openai.com/docs/models"
+        }
+      ],
+      "value_index": 0
+    },
+    {
+      "blended_per_million": 90.0,
+      "context": "200K",
+      "context_length": 200000,
+      "id": "claude-opus-4-1",
+      "input_per_million": 15.0,
+      "intelligence": 97,
+      "knowledge_cutoff": "2025-01-31",
+      "name": "Claude Opus 4.1",
+      "note": "Strong for agentic coding, long-form reasoning, and enterprise reliability.",
+      "openrouter_id": "anthropic/claude-opus-4.1",
+      "output_per_million": 75.0,
+      "parameter_note": "Undisclosed frontier-scale",
+      "provider": "Anthropic",
+      "provider_group": "Anthropic",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/anthropic/claude-opus-4.1"
+        },
+        {
+          "label": "Anthropic models",
+          "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview"
+        },
+        {
+          "label": "Anthropic pricing",
+          "url": "https://www.anthropic.com/pricing"
+        }
+      ],
+      "value_index": 0
+    },
+    {
+      "blended_per_million": 11.25,
+      "context": "1.04858M",
+      "context_length": 1048576,
+      "id": "gemini-2-5-pro",
+      "input_per_million": 1.25,
+      "intelligence": 96,
+      "knowledge_cutoff": "2025-01-31",
+      "name": "Gemini 2.5 Pro",
+      "note": "Excellent intelligence-to-context ratio with a much lower blended price than premium flagships.",
+      "openrouter_id": "google/gemini-2.5-pro",
+      "output_per_million": 10.0,
+      "parameter_note": "Undisclosed frontier-scale",
+      "provider": "Google",
+      "provider_group": "Google",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/google/gemini-2.5-pro"
+        },
+        {
+          "label": "Gemini pricing",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "label": "Gemini models",
+          "url": "https://ai.google.dev/gemini-api/docs/models"
+        }
+      ],
+      "value_index": 2
+    },
+    {
+      "blended_per_million": 18.0,
+      "context": "256K",
+      "context_length": 256000,
+      "id": "grok-4",
+      "input_per_million": 3.0,
+      "intelligence": 95,
+      "knowledge_cutoff": "2025-07-31",
+      "name": "Grok 4",
+      "note": "Competitive frontier model; attractive when current-event handling and tool use matter.",
+      "openrouter_id": "x-ai/grok-4",
+      "output_per_million": 15.0,
+      "parameter_note": "Undisclosed frontier-scale",
+      "provider": "xAI",
+      "provider_group": "xAI",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/x-ai/grok-4"
+        },
+        {
+          "label": "xAI models",
+          "url": "https://docs.x.ai/docs/models"
+        },
+        {
+          "label": "xAI pricing",
+          "url": "https://docs.x.ai/docs/models/pricing"
+        }
+      ],
+      "value_index": 1
+    },
+    {
+      "blended_per_million": 2.65,
+      "context": "164K",
+      "context_length": 163840,
+      "id": "deepseek-r1",
+      "input_per_million": 0.5,
+      "intelligence": 92,
+      "knowledge_cutoff": "2025-03-31",
+      "name": "DeepSeek R1 0528",
+      "note": "Reasoning-heavy open model with unusually strong price/performance.",
+      "openrouter_id": "deepseek/deepseek-r1-0528",
+      "output_per_million": 2.15,
+      "parameter_note": "671B total / 37B active",
+      "provider": "DeepSeek",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/deepseek/deepseek-r1-0528"
+        },
+        {
+          "label": "DeepSeek pricing",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
+        },
+        {
+          "label": "DeepSeek R1",
+          "url": "https://github.com/deepseek-ai/DeepSeek-R1"
+        }
+      ],
+      "value_index": 7
+    },
+    {
+      "blended_per_million": 2.87,
+      "context": "131K",
+      "context_length": 131072,
+      "id": "kimi-k2",
+      "input_per_million": 0.57,
+      "intelligence": 91,
+      "knowledge_cutoff": "2024-12-31",
+      "name": "Kimi K2",
+      "note": "Large MoE model designed for agentic and coding use cases at moderate cost.",
+      "openrouter_id": "moonshotai/kimi-k2",
+      "output_per_million": 2.3,
+      "parameter_note": "1T total / 32B active",
+      "provider": "Moonshot AI",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/moonshotai/kimi-k2"
+        },
+        {
+          "label": "Moonshot pricing",
+          "url": "https://platform.moonshot.ai/docs/pricing"
+        },
+        {
+          "label": "Kimi K2",
+          "url": "https://github.com/MoonshotAI/Kimi-K2"
+        }
+      ],
+      "value_index": 6
+    },
+    {
+      "blended_per_million": 0.171,
+      "context": "262K",
+      "context_length": 262144,
+      "id": "qwen3-235",
+      "input_per_million": 0.071,
+      "intelligence": 88,
+      "knowledge_cutoff": "2025-06-30",
+      "name": "Qwen3 235B A22B",
+      "note": "Extremely strong cost profile for a model above 100B total parameters.",
+      "openrouter_id": "qwen/qwen3-235b-a22b-2507",
+      "output_per_million": 0.1,
+      "parameter_note": "235B total / 22B active",
+      "provider": "Alibaba Qwen",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/qwen/qwen3-235b-a22b-2507"
+        },
+        {
+          "label": "Qwen",
+          "url": "https://qwenlm.github.io/"
+        },
+        {
+          "label": "Qwen Hugging Face",
+          "url": "https://huggingface.co/Qwen"
+        }
+      ],
+      "value_index": 100
+    },
+    {
+      "blended_per_million": 0.75,
+      "context": "1.04858M",
+      "context_length": 1048576,
+      "id": "llama4-maverick",
+      "input_per_million": 0.15,
+      "intelligence": 86,
+      "knowledge_cutoff": "2024-08-31",
+      "name": "Llama 4 Maverick",
+      "note": "Open large-model option with long context and inexpensive inference routes.",
+      "openrouter_id": "meta-llama/llama-4-maverick",
+      "output_per_million": 0.6,
+      "parameter_note": "400B total / 17B active",
+      "provider": "Meta",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/meta-llama/llama-4-maverick"
+        },
+        {
+          "label": "Llama models",
+          "url": "https://www.llama.com/models/"
+        }
+      ],
+      "value_index": 22
+    },
+    {
+      "blended_per_million": 8.0,
+      "context": "128K",
+      "context_length": 128000,
+      "id": "mistral-large",
+      "input_per_million": 2.0,
+      "intelligence": 84,
+      "knowledge_cutoff": "2024-11-30",
+      "name": "Mistral Large",
+      "note": "European provider option; useful where deployment, compliance, or ecosystem fit matters.",
+      "openrouter_id": "mistralai/mistral-large",
+      "output_per_million": 6.0,
+      "parameter_note": "Large / undisclosed",
+      "provider": "Mistral AI",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/mistralai/mistral-large"
+        },
+        {
+          "label": "Mistral models",
+          "url": "https://docs.mistral.ai/getting-started/models/models_overview/"
+        },
+        {
+          "label": "Mistral pricing",
+          "url": "https://mistral.ai/products/la-plateforme#pricing"
+        }
+      ],
+      "value_index": 2
+    },
+    {
+      "blended_per_million": 0.63,
+      "context": "131K",
+      "context_length": 131072,
+      "id": "deepseek-v3",
+      "input_per_million": 0.252,
+      "intelligence": 85,
+      "knowledge_cutoff": null,
+      "name": "DeepSeek V3.2",
+      "note": "Cheap, capable general-purpose workhorse for large-volume jobs.",
+      "openrouter_id": "deepseek/deepseek-v3.2",
+      "output_per_million": 0.378,
+      "parameter_note": "671B total / MoE",
+      "provider": "DeepSeek",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/deepseek/deepseek-v3.2"
+        },
+        {
+          "label": "DeepSeek pricing",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
+        },
+        {
+          "label": "DeepSeek GitHub",
+          "url": "https://github.com/deepseek-ai"
+        }
+      ],
+      "value_index": 26
+    },
+    {
+      "blended_per_million": 2.02,
+      "context": "262K",
+      "context_length": 262144,
+      "id": "qwen3-coder",
+      "input_per_million": 0.22,
+      "intelligence": 83,
+      "knowledge_cutoff": "2025-06-30",
+      "name": "Qwen3 Coder 480B A35B",
+      "note": "Cost-effective for code generation and software-agent workloads.",
+      "openrouter_id": "qwen/qwen3-coder",
+      "output_per_million": 1.8,
+      "parameter_note": "480B total / 35B active",
+      "provider": "Alibaba Qwen",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/qwen/qwen3-coder"
+        },
+        {
+          "label": "Qwen",
+          "url": "https://qwenlm.github.io/"
+        },
+        {
+          "label": "Qwen Hugging Face",
+          "url": "https://huggingface.co/Qwen"
+        }
+      ],
+      "value_index": 8
+    },
+    {
+      "blended_per_million": 0.219,
+      "context": "131K",
+      "context_length": 131072,
+      "id": "gpt-oss-120b",
+      "input_per_million": 0.039,
+      "intelligence": 79,
+      "knowledge_cutoff": "2024-06-30",
+      "name": "gpt-oss-120b",
+      "note": "Very cheap 120B-class option; best for lower-risk routing and bulk text tasks.",
+      "openrouter_id": "openai/gpt-oss-120b",
+      "output_per_million": 0.18,
+      "parameter_note": "120B",
+      "provider": "OpenAI",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/openai/gpt-oss-120b"
+        },
+        {
+          "label": "OpenAI",
+          "url": "https://openai.com/"
+        }
+      ],
+      "value_index": 70
+    },
+    {
+      "blended_per_million": 0.38,
+      "context": "328K",
+      "context_length": 327680,
+      "id": "llama4-scout",
+      "input_per_million": 0.08,
+      "intelligence": 78,
+      "knowledge_cutoff": "2024-08-31",
+      "name": "Llama 4 Scout",
+      "note": "Lowest-cost Meta large model in this set, useful for routing and high-throughput workloads.",
+      "openrouter_id": "meta-llama/llama-4-scout",
+      "output_per_million": 0.3,
+      "parameter_note": "109B total / 17B active",
+      "provider": "Meta",
+      "provider_group": "Open",
+      "sources": [
+        {
+          "label": "OpenRouter",
+          "type": "pricing",
+          "url": "https://openrouter.ai/meta-llama/llama-4-scout"
+        },
+        {
+          "label": "Llama models",
+          "url": "https://www.llama.com/models/"
+        }
+      ],
+      "value_index": 40
+    }
+  ],
+  "rankings": {
+    "cheap": [
+      "qwen3-235",
+      "gpt-oss-120b",
+      "llama4-scout",
+      "deepseek-v3",
+      "llama4-maverick",
+      "qwen3-coder"
+    ],
+    "intelligence": [
+      "openai-gpt-5-pro",
+      "claude-opus-4-1",
+      "gemini-2-5-pro",
+      "grok-4",
+      "deepseek-r1",
+      "kimi-k2"
+    ],
+    "value": [
+      "qwen3-235",
+      "deepseek-v3",
+      "llama4-maverick",
+      "qwen3-coder",
+      "deepseek-r1",
+      "kimi-k2"
+    ],
+    "value_index": {
+      "claude-opus-4-1": 0,
+      "deepseek-r1": 7,
+      "deepseek-v3": 26,
+      "gemini-2-5-pro": 2,
+      "gpt-oss-120b": 70,
+      "grok-4": 1,
+      "kimi-k2": 6,
+      "llama4-maverick": 22,
+      "llama4-scout": 40,
+      "mistral-large": 2,
+      "openai-gpt-5-pro": 0,
+      "qwen3-235": 100,
+      "qwen3-coder": 8
+    }
+  },
+  "scope": "Large LLMs: public 100B+ parameter models plus closed frontier-scale models with undisclosed size.",
+  "source_status": [
+    {
+      "fetched_at": "2026-05-09T07:58:14+00:00",
+      "id": "openrouter-models",
+      "label": "OpenRouter model/pricing API",
+      "notes": "367 models available in API payload.",
+      "status": "cached",
+      "type": "pricing",
+      "url": "https://openrouter.ai/api/v1/models"
+    },
+    {
+      "fetched_at": "2026-05-09T07:58:13+00:00",
+      "id": "artificial-analysis",
+      "label": "Artificial Analysis LLM leaderboards",
+      "notes": "Fetched public page (LLM Leaderboard - Comparison of over 100 AI models from OpenAI, Google, DeepSeek &amp; others); no stable public score API assumed.",
+      "status": "cached",
+      "type": "benchmark-index",
+      "url": "https://artificialanalysis.ai/leaderboards/models"
+    },
+    {
+      "fetched_at": "2026-05-09T07:58:14+00:00",
+      "id": "lmarena",
+      "label": "LMArena leaderboard",
+      "notes": "Fetched public page (Arena Leaderboard | Compare &amp; Benchmark the Best Frontier AI Models); no stable public score API assumed.",
+      "status": "cached",
+      "type": "human-preference",
+      "url": "https://lmarena.ai/leaderboard"
+    },
+    {
+      "fetched_at": "2026-05-09T07:58:14+00:00",
+      "id": "openrouter-rankings",
+      "label": "OpenRouter rankings",
+      "notes": "Fetched public page (LLM Rankings | OpenRouter); no stable public score API assumed.",
+      "status": "cached",
+      "type": "usage-community",
+      "url": "https://openrouter.ai/rankings"
+    }
+  ]
+}
