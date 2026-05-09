@@ -36,11 +36,21 @@ Use cached upstream payloads when offline:
 python3 scripts/ingest_rankings.py --offline
 ```
 
+`--offline` never reaches the network. It uses `data/.cache/openrouter-models.json` when present, then falls back to the committed `data/rankings.json` snapshot so local builds can still run after a fresh clone.
+
 Run tests:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
+
+Validate the committed payload:
+
+```bash
+python3 scripts/validate_rankings.py data/rankings.json --max-age-hours 48
+```
+
+GitHub Actions refreshes `data/rankings.json` from live sources every 6 hours and commits the result when it changes. CI also rejects stale generated data.
 
 ## Pipeline sources
 
@@ -59,3 +69,4 @@ Benchmark sites often render leaderboards client-side or change private APIs. Th
 - Blended cost = input $/M + output $/M.
 - Intelligence score is currently a curated benchmark-consensus seed, blended with benchmark adapter scores when available.
 - Value ranking filters to models with intelligence >= 83, then normalizes intelligence per blended dollar.
+- Newly discovered OpenRouter models that look frontier-scale are shown as review alerts instead of being auto-ranked without a benchmark seed.

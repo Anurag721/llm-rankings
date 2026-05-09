@@ -1,83 +1,83 @@
 [
   {
-    "id": "openai-gpt-5-pro",
-    "name": "GPT-5 Pro",
+    "id": "openai-gpt-5-5-pro",
+    "name": "GPT-5.5 Pro",
     "provider": "OpenAI",
     "provider_group": "OpenAI",
-    "openrouter_id": "openai/gpt-5-pro",
+    "openrouter_id": "openai/gpt-5.5-pro",
     "parameter_note": "Undisclosed frontier-scale",
-    "intelligence_seed": 98,
-    "note": "Top-tier reasoning and coding choice when price is secondary.",
+    "intelligence_seed": 100,
+    "note": "Highest-tier reasoning candidate in the current curated set; best when accuracy is worth premium pricing.",
     "official_sources": [
       {"label": "OpenAI pricing", "url": "https://openai.com/api/pricing/"},
       {"label": "OpenAI models", "url": "https://platform.openai.com/docs/models"}
     ]
   },
   {
-    "id": "claude-opus-4-1",
-    "name": "Claude Opus 4.1",
+    "id": "claude-opus-4-7",
+    "name": "Claude Opus 4.7",
     "provider": "Anthropic",
     "provider_group": "Anthropic",
-    "openrouter_id": "anthropic/claude-opus-4.1",
+    "openrouter_id": "anthropic/claude-opus-4.7",
     "parameter_note": "Undisclosed frontier-scale",
-    "intelligence_seed": 97,
-    "note": "Strong for agentic coding, long-form reasoning, and enterprise reliability.",
+    "intelligence_seed": 99,
+    "note": "Current Opus-family flagship for long-running agents, coding, and high-reliability reasoning.",
     "official_sources": [
       {"label": "Anthropic models", "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview"},
       {"label": "Anthropic pricing", "url": "https://www.anthropic.com/pricing"}
     ]
   },
   {
-    "id": "gemini-2-5-pro",
-    "name": "Gemini 2.5 Pro",
+    "id": "gemini-3-1-pro-preview",
+    "name": "Gemini 3.1 Pro Preview",
     "provider": "Google",
     "provider_group": "Google",
-    "openrouter_id": "google/gemini-2.5-pro",
+    "openrouter_id": "google/gemini-3.1-pro-preview",
     "parameter_note": "Undisclosed frontier-scale",
-    "intelligence_seed": 96,
-    "note": "Excellent intelligence-to-context ratio with a much lower blended price than premium flagships.",
+    "intelligence_seed": 97,
+    "note": "Frontier Gemini reasoning model with a large context window and strong value versus premium flagships.",
     "official_sources": [
       {"label": "Gemini pricing", "url": "https://ai.google.dev/gemini-api/docs/pricing"},
       {"label": "Gemini models", "url": "https://ai.google.dev/gemini-api/docs/models"}
     ]
   },
   {
-    "id": "grok-4",
-    "name": "Grok 4",
+    "id": "grok-4-3",
+    "name": "Grok 4.3",
     "provider": "xAI",
     "provider_group": "xAI",
-    "openrouter_id": "x-ai/grok-4",
+    "openrouter_id": "x-ai/grok-4.3",
     "parameter_note": "Undisclosed frontier-scale",
-    "intelligence_seed": 95,
-    "note": "Competitive frontier model; attractive when current-event handling and tool use matter.",
+    "intelligence_seed": 96,
+    "note": "Current xAI reasoning model with a large context window and competitive blended pricing.",
     "official_sources": [
       {"label": "xAI models", "url": "https://docs.x.ai/docs/models"},
       {"label": "xAI pricing", "url": "https://docs.x.ai/docs/models/pricing"}
     ]
   },
   {
-    "id": "deepseek-r1",
-    "name": "DeepSeek R1 0528",
+    "id": "deepseek-v4-pro",
+    "name": "DeepSeek V4 Pro",
     "provider": "DeepSeek",
     "provider_group": "Open",
-    "openrouter_id": "deepseek/deepseek-r1-0528",
-    "parameter_note": "671B total / 37B active",
-    "intelligence_seed": 92,
-    "note": "Reasoning-heavy open model with unusually strong price/performance.",
+    "openrouter_id": "deepseek/deepseek-v4-pro",
+    "parameter_note": "1.6T total / 49B active",
+    "intelligence_seed": 94,
+    "note": "Large MoE reasoning and coding model with unusually strong price/performance.",
     "official_sources": [
       {"label": "DeepSeek pricing", "url": "https://api-docs.deepseek.com/quick_start/pricing"},
-      {"label": "DeepSeek R1", "url": "https://github.com/deepseek-ai/DeepSeek-R1"}
+      {"label": "DeepSeek GitHub", "url": "https://github.com/deepseek-ai"}
     ]
   },
   {
-    "id": "kimi-k2",
-    "name": "Kimi K2",
+    "id": "kimi-k2-6",
+    "name": "Kimi K2.6",
     "provider": "Moonshot AI",
     "provider_group": "Open",
-    "openrouter_id": "moonshotai/kimi-k2",
+    "openrouter_id": "moonshotai/kimi-k2.6",
     "parameter_note": "1T total / 32B active",
-    "intelligence_seed": 91,
-    "note": "Large MoE model designed for agentic and coding use cases at moderate cost.",
+    "intelligence_seed": 93,
+    "note": "Next-generation Kimi model for long-horizon coding, UI generation, and multi-agent workflows.",
     "official_sources": [
       {"label": "Moonshot pricing", "url": "https://platform.moonshot.ai/docs/pricing"},
       {"label": "Kimi K2", "url": "https://github.com/MoonshotAI/Kimi-K2"}
@@ -111,28 +111,28 @@
     ]
   },
   {
-    "id": "mistral-large",
-    "name": "Mistral Large",
+    "id": "mistral-medium-3-5",
+    "name": "Mistral Medium 3.5",
     "provider": "Mistral AI",
     "provider_group": "Open",
-    "openrouter_id": "mistralai/mistral-large",
-    "parameter_note": "Large / undisclosed",
-    "intelligence_seed": 84,
-    "note": "European provider option; useful where deployment, compliance, or ecosystem fit matters.",
+    "openrouter_id": "mistralai/mistral-medium-3-5",
+    "parameter_note": "128B dense",
+    "intelligence_seed": 86,
+    "note": "European provider option for agentic, coding, and compliance-sensitive workflows.",
     "official_sources": [
       {"label": "Mistral models", "url": "https://docs.mistral.ai/getting-started/models/models_overview/"},
       {"label": "Mistral pricing", "url": "https://mistral.ai/products/la-plateforme#pricing"}
     ]
   },
   {
-    "id": "deepseek-v3",
-    "name": "DeepSeek V3.2",
+    "id": "deepseek-v4-flash",
+    "name": "DeepSeek V4 Flash",
     "provider": "DeepSeek",
     "provider_group": "Open",
-    "openrouter_id": "deepseek/deepseek-v3.2",
-    "parameter_note": "671B total / MoE",
-    "intelligence_seed": 85,
-    "note": "Cheap, capable general-purpose workhorse for large-volume jobs.",
+    "openrouter_id": "deepseek/deepseek-v4-flash",
+    "parameter_note": "284B total / 13B active",
+    "intelligence_seed": 87,
+    "note": "Cheap, fast MoE workhorse for high-volume jobs and latency-sensitive routing.",
     "official_sources": [
       {"label": "DeepSeek pricing", "url": "https://api-docs.deepseek.com/quick_start/pricing"},
       {"label": "DeepSeek GitHub", "url": "https://github.com/deepseek-ai"}

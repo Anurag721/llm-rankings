@@ -3,126 +3,1316 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Frontier LLM Rankings — Intelligence, Value, Cheap</title>
-  <meta name="description" content="A clean ranking site for large LLMs above 100B parameters: most intelligent, cost-efficient, and cheapest options." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>LLM Signal - Frontier LLM Rankings</title>
+  <meta name="description" content="Freshness-aware frontier LLM rankings with source health, cost, value, and model discovery alerts." />
   <style>
-    :root{
-      --bg:#08090a; --panel:#0f1011; --surface:#17181a; --surface2:#1d1f23;
-      --text:#f7f8f8; --muted:#8a8f98; --soft:#d0d6e0; --subtle:#62666d;
-      --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.05);
-      --accent:#7170ff; --accent2:#5e6ad2; --green:#10b981; --amber:#f59e0b; --red:#ef4444;
-      --shadow: 0 24px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
+    :root {
+      --bg: #090b0c;
+      --panel: #101314;
+      --panel-2: #15191a;
+      --panel-3: #1b2021;
+      --text: #f4f1e8;
+      --muted: #a9aaa4;
+      --subtle: #73766f;
+      --line: rgba(244, 241, 232, .12);
+      --line-strong: rgba(244, 241, 232, .2);
+      --green: #5ad9a0;
+      --green-strong: #24b878;
+      --amber: #e5b567;
+      --red: #ff6b5f;
+      --blue: #78a8ff;
+      --ink: #050606;
+      --shadow: 0 20px 70px rgba(0, 0, 0, .34);
     }
-    *{box-sizing:border-box} html{scroll-behavior:smooth}
-    body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(113,112,255,.16),transparent 32rem),radial-gradient(circle at 80% 8%,rgba(16,185,129,.09),transparent 28rem),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-feature-settings:"cv01","ss03";}
-    a{color:inherit} .mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
-    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto}
-    header{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line2);backdrop-filter:blur(18px);background:rgba(8,9,10,.72)}
-    .nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:590;letter-spacing:-.18px}.logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#9ca3ff);display:grid;place-items:center;box-shadow:0 0 42px rgba(113,112,255,.35)}
-    .logo svg{width:20px}.links{display:flex;align-items:center;gap:18px;color:var(--soft);font-size:13px;font-weight:510}.links a{text-decoration:none}.links a:hover{color:var(--text)}
-    .btn{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--soft);padding:9px 13px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:510;cursor:pointer}.btn.primary{background:var(--accent2);border-color:rgba(255,255,255,.14);color:#fff}.btn:hover{border-color:rgba(255,255,255,.16);color:#fff}
-    .hero{padding:84px 0 42px;text-align:center}.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--soft);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:510}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 16px var(--green)}
-    h1{font-size:clamp(42px,7vw,76px);line-height:.96;margin:22px auto 18px;letter-spacing:-1.5px;font-weight:510;max-width:980px}.lead{max-width:760px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.65;letter-spacing:-.16px}
-    .hero-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px}.statbar{margin:42px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:920px}.stat{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:14px;padding:16px}.stat b{display:block;font-size:24px;letter-spacing:-.5px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
-    section{padding:56px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{font-size:32px;line-height:1.1;margin:0;font-weight:510;letter-spacing:-.7px}.section-head p{margin:8px 0 0;color:var(--muted);max-width:690px;line-height:1.6}.controls{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--soft);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:510;cursor:pointer}.chip.active,.chip:hover{background:rgba(113,112,255,.14);border-color:rgba(113,112,255,.48);color:#fff}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:18px;padding:18px;box-shadow:var(--shadow);min-height:288px}.card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--accent),transparent);opacity:.9}.rank{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.rankno{font-size:12px;color:var(--soft);border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:999px;padding:5px 8px}.pill{font-size:11px;color:var(--soft);background:rgba(255,255,255,.05);border:1px solid var(--line2);padding:5px 7px;border-radius:999px}.name{font-size:21px;font-weight:590;letter-spacing:-.35px;margin:0 0 6px}.provider{color:var(--muted);font-size:13px;margin-bottom:14px}.scoreline{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.metric{background:rgba(0,0,0,.22);border:1px solid var(--line2);border-radius:12px;padding:10px}.metric label{display:block;color:var(--subtle);font-size:11px;margin-bottom:5px}.metric b{font-size:18px}.bar{height:7px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:var(--w)}
-    .notes{color:var(--muted);font-size:13px;line-height:1.55;margin:12px 0 0}.sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.sources a{font-size:11px;color:var(--soft);text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:5px 7px;background:rgba(255,255,255,.025)}.sources a:hover{border-color:var(--accent);color:#fff}
-    .method{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.panel{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h3{margin:0 0 10px;font-size:20px;font-weight:590;letter-spacing:-.25px}.panel p,.panel li{color:var(--muted);line-height:1.65}.panel ul{margin:8px 0 0;padding-left:18px}.source-list{display:grid;gap:8px}.source-list a{display:flex;justify-content:space-between;gap:10px;align-items:center;text-decoration:none;border:1px solid var(--line2);background:rgba(255,255,255,.025);border-radius:12px;padding:11px;color:var(--soft);font-size:13px}.source-list span{color:var(--subtle);font-size:11px}.source-list a:hover{border-color:rgba(113,112,255,.48)}
-    .table{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.02)}.row{display:grid;grid-template-columns:44px 1.2fr .8fr .8fr .8fr 1fr;gap:10px;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line2);font-size:13px}.row.head{color:var(--subtle);font-size:11px;text-transform:uppercase;letter-spacing:.08em;background:rgba(255,255,255,.025)}.row:last-child{border-bottom:0}.row strong{font-weight:590}.muted{color:var(--muted)}
-    footer{padding:40px 0 60px;color:var(--subtle);font-size:12px;border-top:1px solid var(--line2)}
-    @media(max-width:900px){.grid,.method,.statbar{grid-template-columns:1fr 1fr}.row{grid-template-columns:36px 1.4fr .8fr .8fr}.row .hide-sm{display:none}.links{display:none}.hero{text-align:left}.hero-actions{justify-content:flex-start}}
-    @media(max-width:620px){.grid,.method,.statbar{grid-template-columns:1fr}.section-head{display:block}.row{grid-template-columns:32px 1fr .7fr}.row .hide-xs{display:none}h1{letter-spacing:-.9px}}
+
+    * {
+      box-sizing: border-box;
+      letter-spacing: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-feature-settings: "tnum";
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(9, 11, 12, .86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .mark {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background:
+        linear-gradient(135deg, rgba(90, 217, 160, .24), transparent 56%),
+        var(--panel-2);
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .navlinks a {
+      text-decoration: none;
+    }
+
+    .navlinks a:hover {
+      color: var(--text);
+    }
+
+    .freshness-badge,
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(255, 255, 255, .025);
+      white-space: nowrap;
+    }
+
+    .freshness-badge::before,
+    .status-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--subtle);
+    }
+
+    .freshness-badge.fresh::before,
+    .status-pill.ok::before {
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(90, 217, 160, .36);
+    }
+
+    .freshness-badge.aging::before,
+    .status-pill.warn::before {
+      background: var(--amber);
+    }
+
+    .freshness-badge.stale::before,
+    .status-pill.bad::before {
+      background: var(--red);
+    }
+
+    main {
+      padding: 30px 0 56px;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+      gap: 22px;
+      align-items: stretch;
+      min-height: calc(100svh - 120px);
+    }
+
+    .intro,
+    .source-panel,
+    .rail,
+    .rank-pane,
+    .chart-panel,
+    .table-panel,
+    .watch-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .intro {
+      padding: clamp(24px, 4vw, 46px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      opacity: .8;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin-bottom: 18px;
+      font-size: clamp(44px, 7vw, 82px);
+      line-height: .94;
+      font-weight: 760;
+    }
+
+    .lede {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 34px;
+    }
+
+    .summary-cell {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    .summary-cell b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .summary-cell span {
+      color: var(--subtle);
+      font-size: 12px;
+    }
+
+    .source-panel {
+      padding: 22px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      background:
+        linear-gradient(180deg, rgba(90, 217, 160, .05), transparent 34%),
+        var(--panel);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .panel-head h2,
+    .section-title h2 {
+      margin-bottom: 6px;
+      font-size: 22px;
+      line-height: 1.12;
+    }
+
+    .panel-head p,
+    .section-title p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .source-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px;
+      background: rgba(255, 255, 255, .025);
+      text-decoration: none;
+    }
+
+    .source-item strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .source-item span {
+      color: var(--subtle);
+      font-size: 12px;
+    }
+
+    .control-band {
+      margin: 22px 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .segmented,
+    .provider-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .segmented button,
+    .provider-filters button {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--muted);
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+
+    .segmented button:hover,
+    .provider-filters button:hover,
+    .segmented button.active,
+    .provider-filters button.active {
+      border-color: rgba(90, 217, 160, .55);
+      color: var(--text);
+      background: rgba(90, 217, 160, .08);
+    }
+
+    .search {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: rgba(90, 217, 160, .7);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .rail {
+      padding: 18px;
+      position: sticky;
+      top: 82px;
+    }
+
+    .rail h2 {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .rail-block + .rail-block {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .status-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rank-pane {
+      overflow: hidden;
+    }
+
+    .rank-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    .rank-head h2 {
+      margin-bottom: 4px;
+      font-size: 20px;
+    }
+
+    .rank-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .rank-list {
+      display: grid;
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) minmax(300px, .78fr);
+      gap: 14px;
+      align-items: center;
+      min-height: 138px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .rank-row:hover {
+      background: var(--panel-2);
+      transform: translateY(-1px);
+    }
+
+    .rank-row:last-child {
+      border-bottom: 0;
+    }
+
+    .rank-num {
+      color: var(--green);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .model-main h3 {
+      margin-bottom: 6px;
+      font-size: 22px;
+      line-height: 1.18;
+    }
+
+    .model-main p {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .source-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .source-links a {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px 7px;
+      color: var(--muted);
+      font-size: 11px;
+      text-decoration: none;
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .source-links a:hover {
+      color: var(--text);
+      border-color: var(--line-strong);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric {
+      min-width: 0;
+    }
+
+    .metric label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .08);
+      overflow: hidden;
+    }
+
+    .bar i {
+      display: block;
+      width: var(--w);
+      height: 100%;
+      border-radius: 6px;
+      background: var(--green);
+    }
+
+    .bar.cost i {
+      background: var(--amber);
+    }
+
+    .bar.value i {
+      background: var(--blue);
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .chart-panel,
+    .table-panel,
+    .watch-panel {
+      padding: 18px;
+    }
+
+    .chart-panel canvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--ink);
+    }
+
+    .watch-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .watch-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .watch-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .watch-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .watch-item a {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--text);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .table-panel {
+      margin-top: 22px;
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px -18px -18px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border-top: 1px solid var(--line);
+      padding: 12px 18px;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      background: var(--panel-2);
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    td strong {
+      color: var(--text);
+    }
+
+    .empty-state {
+      padding: 28px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: var(--subtle);
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .overview,
+      .workspace,
+      .chart-grid,
+      .control-band {
+        grid-template-columns: 1fr;
+      }
+
+      .overview {
+        min-height: auto;
+      }
+
+      .rail {
+        position: static;
+      }
+
+      .rank-row {
+        grid-template-columns: 42px minmax(0, 1fr);
+      }
+
+      .metrics {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 22px, 1240px);
+      }
+
+      .nav {
+        height: auto;
+        padding: 12px 0;
+        align-items: flex-start;
+      }
+
+      .navlinks {
+        display: none;
+      }
+
+      .freshness-badge {
+        white-space: normal;
+      }
+
+      .intro,
+      .source-panel,
+      .rail,
+      .rank-head,
+      .rank-row,
+      .chart-panel,
+      .table-panel,
+      .watch-panel {
+        padding: 14px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 14vw, 58px);
+      }
+
+      .summary-grid,
+      .metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rank-row {
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .chart-panel canvas {
+        height: 320px;
+      }
+    }
   </style>
 </head>
 <body>
-  <header><div class="wrap nav"><div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 16.5 9.7 6.8l4.2 7.1 2.2-3.8L20 16.5H4Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg></div><span>LLM Signal</span></div><nav class="links"><a href="#intelligence">Intelligence</a><a href="#value">Cost-efficient</a><a href="#cheap">Cheap</a><a href="#sources">Sources</a></nav><a class="btn primary" href="#rankings">View rankings</a></div></header>
-  <main>
-    <section class="hero wrap"><div class="eyebrow"><span class="dot"></span> Large-model rankings for 100B+ / frontier-scale LLMs</div><h1>Find the smartest, best-value, and cheapest big LLMs without the noise.</h1><p class="lead">A curated comparison built for teams choosing serious LLMs. It combines official provider pages, OpenRouter pricing, and public benchmark leaders into three practical rankings.</p><div class="hero-actions"><a class="btn primary" href="#intelligence">Most intelligent</a><a class="btn" href="#value">Intelligent but cheap</a><a class="btn" href="#cheap">Lowest cost</a></div><div class="statbar"><div class="stat"><b>100B+</b><span>public parameter floor where available</span></div><div class="stat"><b>3</b><span>decision-ready rankings</span></div><div class="stat"><b>$/M</b><span>normalized token pricing</span></div><div class="stat"><b>Live-ready</b><span>designed to refresh from sources</span></div></div></section>
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="#rankings" aria-label="LLM Signal home"><span class="mark" aria-hidden="true">S</span><span>LLM Signal</span></a>
+      <nav class="navlinks" aria-label="Primary navigation">
+        <a href="#rankings">Rankings</a>
+        <a href="#map">Map</a>
+        <a href="#table">Table</a>
+        <a href="#watchlist">Watchlist</a>
+      </nav>
+      <div class="freshness-badge" id="freshness-badge">Loading source status</div>
+    </div>
+  </header>
 
-    <section id="rankings" class="wrap"><div class="section-head"><div><h2>Rankings snapshot</h2><p>Scores are generated by the ingestion pipeline: OpenRouter supplies live pricing and context, official provider pages document model identity, and benchmark adapters track Artificial Analysis, LMArena, and OpenRouter rankings.</p></div><div class="controls" id="filters"><button class="chip active" data-provider="all">All</button><button class="chip" data-provider="OpenAI">OpenAI</button><button class="chip" data-provider="Anthropic">Anthropic</button><button class="chip" data-provider="Google">Google</button><button class="chip" data-provider="xAI">xAI</button><button class="chip" data-provider="Open">Open / OSS</button></div></div></section>
+  <main class="shell">
+    <section class="overview" aria-labelledby="page-title">
+      <div class="intro">
+        <div>
+          <p class="eyebrow">LLM Signal</p>
+          <h1 id="page-title">Frontier LLM rankings</h1>
+          <p class="lede">A freshness-aware workspace for choosing large language models by intelligence, production value, and blended token cost.</p>
+        </div>
+        <div class="summary-grid" id="summary-grid" aria-label="Ranking summary">
+          <div class="summary-cell"><b>...</b><span>models ranked</span></div>
+          <div class="summary-cell"><b>...</b><span>sources checked</span></div>
+          <div class="summary-cell"><b>...</b><span>data age</span></div>
+          <div class="summary-cell"><b>...</b><span>review alerts</span></div>
+        </div>
+      </div>
 
-    <section id="intelligence" class="wrap"><div class="section-head"><div><h2>1. Most intelligent</h2><p>Best when quality matters more than price: hard reasoning, coding, agentic workflows, and complex enterprise tasks.</p></div></div><div class="grid" data-list="intelligence"></div></section>
+      <aside class="source-panel" aria-labelledby="source-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="source-title">Source health</h2>
+            <p id="source-copy">Loading the generated ranking snapshot.</p>
+          </div>
+          <span class="status-pill" id="source-pill">Pending</span>
+        </div>
+        <div class="source-list" id="source-list"></div>
+        <p class="status-copy" id="freshness-copy">Rankings are validated against source status and data age before they are displayed as current.</p>
+      </aside>
+    </section>
 
-    <section id="value" class="wrap"><div class="section-head"><div><h2>2. Cost-efficient intelligence</h2><p>Models that stay near frontier quality while keeping blended token cost sane. This is often the best production shortlist.</p></div></div><div class="grid" data-list="value"></div></section>
+    <section class="control-band" aria-label="Ranking controls">
+      <div class="segmented" id="view-controls">
+        <button type="button" data-view="intelligence" class="active">Intelligence</button>
+        <button type="button" data-view="value">Value</button>
+        <button type="button" data-view="cheap">Cheapest</button>
+        <button type="button" data-view="all">All models</button>
+      </div>
+      <label>
+        <span class="sr-only">Search models</span>
+        <input class="search" id="model-search" type="search" placeholder="Search model, provider, or id" autocomplete="off" />
+      </label>
+    </section>
 
-    <section id="cheap" class="wrap"><div class="section-head"><div><h2>3. Cheap big models</h2><p>Lowest-cost 100B+ options for routing, summarization, extraction, bulk analysis, and non-critical workloads.</p></div></div><div class="grid" data-list="cheap"></div></section>
+    <section class="workspace" id="rankings">
+      <aside class="rail" aria-label="Filters and freshness">
+        <div class="rail-block">
+          <h2>Provider</h2>
+          <div class="provider-filters" id="provider-filters"></div>
+        </div>
+        <div class="rail-block">
+          <h2>Freshness</h2>
+          <p class="status-copy" id="freshness-detail">Waiting for generated_at.</p>
+        </div>
+        <div class="rail-block">
+          <h2>Ranking policy</h2>
+          <p class="status-copy">Value ranking only scores models with intelligence at 83 or higher. Newly detected frontier-scale models stay in the review watchlist until a benchmark seed exists.</p>
+        </div>
+      </aside>
 
-    <section class="wrap"><div class="section-head"><div><h2>Complete comparison table</h2><p>Use this to compare all included models across quality, cost, parameter status, and context window.</p></div></div><div class="table" id="table"></div></section>
+      <section class="rank-pane" aria-live="polite">
+        <div class="rank-head">
+          <div>
+            <h2 id="rank-title">Intelligence ranking</h2>
+            <p id="rank-description">Best when output quality matters more than token price.</p>
+          </div>
+          <span class="status-pill ok" id="rank-count">0 models</span>
+        </div>
+        <div class="rank-list" id="rank-list"></div>
+      </section>
+    </section>
 
-    <section id="sources" class="wrap"><div class="method"><div class="panel"><h3>Methodology</h3><ul><li><b>Scope:</b> primarily 100B+ public models and closed frontier models whose exact parameter counts are not disclosed but are clearly positioned as flagship large LLMs.</li><li><b>Intelligence index:</b> generated from a curated benchmark-consensus seed and blended with machine-readable benchmark signals when adapters expose stable scores.</li><li><b>Cost:</b> OpenRouter API pricing converted to dollars per million tokens. Blended cost = input $/M + output $/M.</li><li><b>Value index:</b> intelligence score divided by blended cost, then normalized for readability. Very low-cost models can rank high only if their intelligence score remains competitive.</li><li><b>Warning:</b> benchmark rankings move fast. Treat this as a website foundation with visible source links, not a permanent truth table.</li></ul></div><div class="panel"><h3>Primary sources to monitor</h3><div class="source-list"><a href="https://openrouter.ai/api/v1/models" target="_blank">OpenRouter model/pricing API <span>pricing</span></a><a href="https://openrouter.ai/rankings" target="_blank">OpenRouter rankings <span>usage + community</span></a><a href="https://artificialanalysis.ai/leaderboards/models" target="_blank">Artificial Analysis LLM leaderboards <span>benchmark index</span></a><a href="https://lmarena.ai/leaderboard" target="_blank">LMArena leaderboard <span>human preference</span></a><a href="https://openai.com/api/pricing/" target="_blank">OpenAI API pricing <span>official</span></a><a href="https://docs.anthropic.com/en/docs/about-claude/models/overview" target="_blank">Anthropic Claude model docs <span>official</span></a><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank">Google Gemini pricing <span>official</span></a><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank">DeepSeek API pricing <span>official</span></a><a href="https://docs.x.ai/docs/models" target="_blank">xAI model docs <span>official</span></a><a href="https://qwenlm.github.io/" target="_blank">Qwen official model pages <span>official</span></a><a href="https://www.llama.com/models/" target="_blank">Meta Llama models <span>official</span></a><a href="https://platform.moonshot.ai/docs/pricing" target="_blank">Moonshot / Kimi pricing <span>official</span></a></div></div></div></section>
+    <section class="chart-grid" id="map">
+      <div class="chart-panel">
+        <div class="section-title">
+          <h2>Quality-cost map</h2>
+          <p>Each point plots intelligence against blended dollars per million tokens. Lower cost sits left; stronger models sit higher.</p>
+        </div>
+        <canvas id="market-map" width="900" height="520" aria-label="Scatter chart of model intelligence and blended cost"></canvas>
+      </div>
+
+      <div class="watch-panel" id="watchlist">
+        <div class="section-title">
+          <h2>Review watchlist</h2>
+          <p>OpenRouter models detected after the ranked candidate list that look frontier-scale or large enough to review.</p>
+        </div>
+        <div class="watch-list" id="watch-list"></div>
+      </div>
+    </section>
+
+    <section class="table-panel" id="table">
+      <div class="section-title">
+        <h2>Complete comparison</h2>
+        <p>All ranked candidates, sorted by the active filter and search query.</p>
+      </div>
+      <div class="table-wrap" id="comparison-table"></div>
+    </section>
   </main>
-  <footer><div class="wrap">Snapshot generated for a fast-moving space. Recheck official provider pages before procurement, rate-card negotiation, or production routing decisions.</div></footer>
+
+  <footer>
+    <div class="shell" id="footer-copy">Loading ranking metadata.</div>
+  </footer>
+
   <script>
-    let models = [];
-    let rankings = { intelligence: [], value: [], cheap: [], value_index: {} };
-    const byId = id => models.find(m => m.id === id);
-    const fmt = n => Number.isFinite(Number(n)) ? Number(n).toFixed(Number(n) < 1 ? 3 : 2).replace(/\.00$/, '') : 'n/a';
-    const sourceUrl = s => typeof s === 'string' ? s : s.url;
-    const sourceText = s => typeof s === 'string' ? sourceLabel(s) : (s.label || sourceLabel(s.url));
-    const sourceLabel = u => {
-      try { return new URL(u).hostname.replace('www.','').split('.')[0]; }
-      catch { return 'source'; }
+    const state = {
+      view: "intelligence",
+      provider: "all",
+      search: "",
+      payload: null,
+      models: [],
+      rankings: { intelligence: [], value: [], cheap: [], value_index: {} }
     };
-    function normalizeModel(m){
-      return {
-        ...m,
-        group: m.provider_group,
-        params: m.parameter_note,
-        ctx: m.context,
-        intel: m.intelligence,
-        inCost: m.input_per_million,
-        outCost: m.output_per_million,
-        cost: m.blended_per_million,
-        value: m.value_index || rankings.value_index?.[m.id] || 0,
-      };
-    }
-    function card(m, idx, mode){
-      const topMetric = mode==='cheap' ? `$${fmt(m.cost)}` : mode==='value' ? m.value : m.intel;
-      const topLabel = mode==='cheap' ? 'blended $/M' : mode==='value' ? 'value index' : 'intelligence';
-      const bar = mode==='cheap' ? Math.max(8, 100 - Math.min(95, Number(m.cost)/2)) : (mode==='value'?m.value:m.intel);
-      const src = (m.sources || []).slice(0,3).map(s=>`<a href="${sourceUrl(s)}" target="_blank" rel="noopener">${sourceText(s)}</a>`).join('');
-      return `<article class="card" data-provider="${m.group}"><div class="rank"><span class="rankno mono">#${idx+1}</span><span class="pill">${m.params}</span></div><h3 class="name">${m.name}</h3><div class="provider">${m.provider} · context ${m.ctx || 'Unknown'}</div><div class="scoreline"><div class="metric"><label>${topLabel}</label><b>${topMetric}</b><div class="bar"><i style="--w:${bar}%"></i></div></div><div class="metric"><label>input / output</label><b>$${fmt(m.inCost)} / $${fmt(m.outCost)}</b><div class="muted mono" style="font-size:11px;margin-top:5px">per 1M tokens</div></div></div><p class="notes">${m.note}</p><div class="sources">${src}</div></article>`
-    }
-    function ranked(ids, fallbackSort){
-      const list = (ids || []).map(byId).filter(Boolean);
-      return list.length ? list : [...models].sort(fallbackSort).slice(0,6);
-    }
-    function render(provider='all'){
-      const filter = arr => provider==='all' ? arr : arr.filter(m=>m.group===provider);
-      const intelligence = filter(ranked(rankings.intelligence, (a,b)=>b.intel-a.intel));
-      const value = filter(ranked(rankings.value, (a,b)=>b.value-a.value));
-      const cheap = filter(ranked(rankings.cheap, (a,b)=>a.cost-b.cost));
-      document.querySelector('[data-list="intelligence"]').innerHTML = intelligence.map((m,i)=>card(m,i,'intelligence')).join('') || empty();
-      document.querySelector('[data-list="value"]').innerHTML = value.map((m,i)=>card(m,i,'value')).join('') || empty();
-      document.querySelector('[data-list="cheap"]').innerHTML = cheap.map((m,i)=>card(m,i,'cheap')).join('') || empty();
-      const rows = filter([...models].sort((a,b)=>b.intel-a.intel));
-      document.getElementById('table').innerHTML = `<div class="row head"><div>#</div><div>Model</div><div class="hide-xs">Provider</div><div>Intel</div><div class="hide-sm">Blended</div><div class="hide-sm">Params</div></div>` + rows.map((m,i)=>`<div class="row"><div class="mono muted">${i+1}</div><div><strong>${m.name}</strong><div class="muted">${m.ctx} context</div></div><div class="hide-xs">${m.provider}</div><div>${m.intel}</div><div class="hide-sm">$${fmt(m.cost)}/M</div><div class="hide-sm muted">${m.params}</div></div>`).join('');
-    }
-    function renderSourceStatus(payload){
-      const footer = document.querySelector('footer .wrap');
-      if (!footer || !payload.generated_at) return;
-      const ok = (payload.source_status || []).filter(s => ['fetched','cached'].includes(s.status)).length;
-      footer.innerHTML = `Automated ingestion generated this snapshot at <span class="mono">${payload.generated_at}</span>. Sources healthy: ${ok}/${(payload.source_status || []).length}. Recheck official provider pages before procurement, rate-card negotiation, or production routing decisions.`;
-    }
-    function empty(){return '<div class="panel"><p>No models match this filter.</p></div>'}
-    async function init(){
+
+    const viewConfig = {
+      intelligence: {
+        title: "Intelligence ranking",
+        description: "Best when output quality matters more than token price.",
+        metricLabel: "Intelligence",
+        metricClass: "",
+        sort: (a, b) => b.intel - a.intel
+      },
+      value: {
+        title: "Value ranking",
+        description: "Strong models with competitive intelligence per blended dollar.",
+        metricLabel: "Value index",
+        metricClass: "value",
+        sort: (a, b) => b.value - a.value || b.intel - a.intel
+      },
+      cheap: {
+        title: "Cheapest large models",
+        description: "Lowest blended token cost among ranked large-model candidates.",
+        metricLabel: "Blended cost",
+        metricClass: "cost",
+        sort: (a, b) => a.cost - b.cost
+      },
+      all: {
+        title: "All ranked models",
+        description: "Full candidate set with intelligence, value, context, and cost.",
+        metricLabel: "Intelligence",
+        metricClass: "",
+        sort: (a, b) => b.intel - a.intel
+      }
+    };
+
+    const escapeMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    };
+
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => escapeMap[char]);
+    const isFiniteNumber = value => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+    const numberValue = value => isFiniteNumber(value) ? Number(value) : null;
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    function safeUrl(value) {
       try {
-        const payload = await fetch('data/rankings.json', {cache: 'no-store'}).then(r => {
-          if (!r.ok) throw new Error(`rankings.json HTTP ${r.status}`);
-          return r.json();
-        });
-        rankings = payload.rankings || rankings;
-        models = (payload.models || []).map(normalizeModel);
-        renderSourceStatus(payload);
-        render();
-      } catch (error) {
-        console.error('Failed to load automated ranking data', error);
-        document.querySelector('[data-list="intelligence"]').innerHTML = `<div class="panel"><p>Automated ranking data failed to load: ${error.message}</p></div>`;
+        const url = new URL(String(value || ""), window.location.href);
+        return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+      } catch {
+        return "#";
       }
     }
-    document.getElementById('filters').addEventListener('click', e=>{if(!e.target.matches('button'))return;document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');render(e.target.dataset.provider)});
+
+    function formatCost(value) {
+      if (!isFiniteNumber(value)) return "n/a";
+      const n = Number(value);
+      return `$${n < 1 ? n.toFixed(3) : n.toFixed(2).replace(/\.00$/, "")}`;
+    }
+
+    function formatPlainNumber(value) {
+      return isFiniteNumber(value) ? String(Math.round(Number(value))) : "n/a";
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "unknown";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "unknown";
+      return date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function ageHours(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return null;
+      return Math.max(0, (Date.now() - date.getTime()) / 36e5);
+    }
+
+    function formatAge(hours) {
+      if (hours === null) return "unknown";
+      if (hours < 1) return `${Math.max(1, Math.round(hours * 60))}m`;
+      if (hours < 48) return `${Math.round(hours)}h`;
+      return `${Math.round(hours / 24)}d`;
+    }
+
+    function freshnessInfo(payload) {
+      const hours = ageHours(payload?.generated_at);
+      const staleAfter = Number(payload?.freshness_policy?.stale_after_hours || 24);
+      const reviewAfter = Number(payload?.freshness_policy?.review_after_hours || 168);
+      if (hours === null) return { className: "stale", label: "Unknown age", detail: "generated_at is missing or invalid." };
+      if (hours <= staleAfter) return { className: "fresh", label: `Current - ${formatAge(hours)} old`, detail: `Generated ${formatDateTime(payload.generated_at)}.` };
+      if (hours <= reviewAfter) return { className: "aging", label: `Review - ${formatAge(hours)} old`, detail: `Generated ${formatDateTime(payload.generated_at)}. Refresh soon.` };
+      return { className: "stale", label: `Stale - ${formatAge(hours)} old`, detail: `Generated ${formatDateTime(payload.generated_at)}. Refresh required.` };
+    }
+
+    function normalizeModel(model) {
+      return {
+        ...model,
+        group: model.provider_group || "Other",
+        params: model.parameter_note || "Unknown",
+        ctx: model.context || "Unknown",
+        intel: numberValue(model.intelligence) ?? 0,
+        value: numberValue(model.value_index ?? state.rankings.value_index?.[model.id]) ?? 0,
+        inCost: numberValue(model.input_per_million),
+        outCost: numberValue(model.output_per_million),
+        cost: numberValue(model.blended_per_million)
+      };
+    }
+
+    function sourceLabel(source) {
+      if (typeof source === "string") {
+        try { return new URL(source).hostname.replace(/^www\./, ""); }
+        catch { return "source"; }
+      }
+      return source?.label || sourceLabel(source?.url || "");
+    }
+
+    function sourceHref(source) {
+      return typeof source === "string" ? safeUrl(source) : safeUrl(source?.url);
+    }
+
+    function renderSourceLinks(model) {
+      return (model.sources || []).slice(0, 4).map(source => {
+        const href = sourceHref(source);
+        const label = escapeHtml(sourceLabel(source));
+        return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+      }).join("");
+    }
+
+    function byId(id) {
+      return state.models.find(model => model.id === id);
+    }
+
+    function rankedBaseModels() {
+      if (state.view === "all") return [...state.models].sort(viewConfig.all.sort);
+      const ids = state.rankings[state.view] || [];
+      const list = ids.map(byId).filter(Boolean);
+      return list.length ? list : [...state.models].sort(viewConfig[state.view].sort).slice(0, 6);
+    }
+
+    function filteredModels(base = rankedBaseModels()) {
+      const query = state.search.trim().toLowerCase();
+      return base.filter(model => {
+        const providerMatch = state.provider === "all" || model.group === state.provider;
+        if (!providerMatch) return false;
+        if (!query) return true;
+        return [model.name, model.provider, model.openrouter_id, model.id].some(value => String(value || "").toLowerCase().includes(query));
+      });
+    }
+
+    function barPercent(model, metric) {
+      if (metric === "value") return clamp(model.value, 4, 100);
+      if (metric === "cheap") {
+        const costs = state.models.map(item => item.cost).filter(isFiniteNumber);
+        const min = Math.min(...costs);
+        const max = Math.max(...costs);
+        if (!isFiniteNumber(model.cost) || min === max) return 8;
+        return clamp(100 - ((model.cost - min) / (max - min)) * 88, 8, 100);
+      }
+      return clamp(model.intel, 4, 100);
+    }
+
+    function primaryMetric(model) {
+      if (state.view === "value") return formatPlainNumber(model.value);
+      if (state.view === "cheap") return formatCost(model.cost);
+      return formatPlainNumber(model.intel);
+    }
+
+    function renderRow(model, index) {
+      const config = viewConfig[state.view];
+      const metricName = escapeHtml(config.metricLabel);
+      const metricValue = escapeHtml(primaryMetric(model));
+      const metricClass = escapeHtml(config.metricClass);
+      const width = `${barPercent(model, state.view).toFixed(1)}%`;
+      return `
+        <article class="rank-row">
+          <div class="rank-num">#${index + 1}</div>
+          <div class="model-main">
+            <h3>${escapeHtml(model.name)}</h3>
+            <p>${escapeHtml(model.provider)} / ${escapeHtml(model.params)} / ${escapeHtml(model.ctx)} context</p>
+            <div class="source-links">${renderSourceLinks(model)}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <label>${metricName}</label>
+              <strong>${metricValue}</strong>
+              <div class="bar ${metricClass}"><i style="--w:${width}"></i></div>
+            </div>
+            <div class="metric">
+              <label>Input / output</label>
+              <strong>${escapeHtml(formatCost(model.inCost))} / ${escapeHtml(formatCost(model.outCost))}</strong>
+              <div class="bar cost"><i style="--w:${barPercent(model, "cheap").toFixed(1)}%"></i></div>
+            </div>
+            <div class="metric">
+              <label>Value</label>
+              <strong>${escapeHtml(formatPlainNumber(model.value))}</strong>
+              <div class="bar value"><i style="--w:${clamp(model.value, 4, 100)}%"></i></div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderRankings() {
+      const config = viewConfig[state.view];
+      const models = filteredModels();
+      document.getElementById("rank-title").textContent = config.title;
+      document.getElementById("rank-description").textContent = config.description;
+      document.getElementById("rank-count").textContent = `${models.length} model${models.length === 1 ? "" : "s"}`;
+      document.getElementById("rank-list").innerHTML = models.length
+        ? models.map(renderRow).join("")
+        : `<div class="empty-state">No models match the current filters.</div>`;
+    }
+
+    function renderProviderFilters() {
+      const groups = ["all", ...Array.from(new Set(state.models.map(model => model.group))).sort()];
+      document.getElementById("provider-filters").innerHTML = groups.map(group => {
+        const label = group === "all" ? "All" : group;
+        const active = group === state.provider ? "active" : "";
+        return `<button type="button" class="${active}" data-provider="${escapeHtml(group)}">${escapeHtml(label)}</button>`;
+      }).join("");
+    }
+
+    function renderSummary() {
+      const payload = state.payload;
+      const info = freshnessInfo(payload);
+      const sources = payload.source_status || [];
+      const healthy = sources.filter(source => ["fetched", "cached", "from-generated"].includes(source.status)).length;
+      const alerts = payload.catalog?.discovery_alerts?.length || 0;
+      document.getElementById("summary-grid").innerHTML = `
+        <div class="summary-cell"><b>${state.models.length}</b><span>models ranked</span></div>
+        <div class="summary-cell"><b>${healthy}/${sources.length}</b><span>sources healthy</span></div>
+        <div class="summary-cell"><b>${escapeHtml(formatAge(ageHours(payload.generated_at)))}</b><span>data age</span></div>
+        <div class="summary-cell"><b>${alerts}</b><span>review alerts</span></div>
+      `;
+
+      const badge = document.getElementById("freshness-badge");
+      badge.className = `freshness-badge ${info.className}`;
+      badge.textContent = info.label;
+      document.getElementById("freshness-detail").textContent = info.detail;
+      document.getElementById("freshness-copy").textContent = `${info.detail} Source health and discovery alerts are included in the generated payload.`;
+      document.getElementById("footer-copy").textContent = `Generated snapshot: ${formatDateTime(payload.generated_at)}. Recheck official provider pages before procurement, routing, or rate-card decisions.`;
+    }
+
+    function renderSourceHealth() {
+      const payload = state.payload;
+      const sources = payload.source_status || [];
+      const healthy = sources.filter(source => ["fetched", "cached", "from-generated"].includes(source.status)).length;
+      const pill = document.getElementById("source-pill");
+      const className = healthy === sources.length ? "ok" : healthy > 0 ? "warn" : "bad";
+      pill.className = `status-pill ${className}`;
+      pill.textContent = `${healthy}/${sources.length} healthy`;
+      document.getElementById("source-copy").textContent = `${payload.catalog?.openrouter_model_count || 0} OpenRouter models scanned; ${payload.catalog?.ranked_candidate_count || 0} curated candidates ranked.`;
+      document.getElementById("source-list").innerHTML = sources.map(source => {
+        const status = source.status || "unknown";
+        const statusClass = ["fetched", "cached", "from-generated"].includes(status) ? "ok" : status === "missing-cache" ? "warn" : "bad";
+        return `
+          <a class="source-item" href="${escapeHtml(safeUrl(source.url))}" target="_blank" rel="noopener noreferrer">
+            <span>
+              <strong>${escapeHtml(source.label || source.id)}</strong>
+              <span>${escapeHtml(source.notes || status)}</span>
+            </span>
+            <span class="status-pill ${statusClass}">${escapeHtml(status)}</span>
+          </a>
+        `;
+      }).join("");
+    }
+
+    function renderTable() {
+      const models = filteredModels([...state.models].sort(viewConfig[state.view].sort));
+      document.getElementById("comparison-table").innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Model</th>
+              <th>Provider</th>
+              <th>Intel</th>
+              <th>Value</th>
+              <th>Blended</th>
+              <th>Context</th>
+              <th>Params</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${models.map((model, index) => `
+              <tr>
+                <td>${index + 1}</td>
+                <td><strong>${escapeHtml(model.name)}</strong><br>${escapeHtml(model.openrouter_id || model.id)}</td>
+                <td>${escapeHtml(model.provider)}</td>
+                <td>${escapeHtml(formatPlainNumber(model.intel))}</td>
+                <td>${escapeHtml(formatPlainNumber(model.value))}</td>
+                <td>${escapeHtml(formatCost(model.cost))}/M</td>
+                <td>${escapeHtml(model.ctx)}</td>
+                <td>${escapeHtml(model.params)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderWatchlist() {
+      const alerts = state.payload.catalog?.discovery_alerts || [];
+      document.getElementById("watch-list").innerHTML = alerts.length ? alerts.map(alert => `
+        <div class="watch-item">
+          <span>
+            <strong>${escapeHtml(alert.name || alert.id)}</strong>
+            <span>${escapeHtml(alert.context || "Unknown")} context / ${escapeHtml(formatCost(alert.blended_per_million))}/M / detected ${escapeHtml(formatDateTime(alert.created_at))}</span>
+          </span>
+          <a href="${escapeHtml(safeUrl(alert.url))}" target="_blank" rel="noopener noreferrer">Review</a>
+        </div>
+      `).join("") : `<div class="empty-state">No unranked frontier-scale candidates detected in the latest OpenRouter scan.</div>`;
+    }
+
+    function drawMarketMap() {
+      const canvas = document.getElementById("market-map");
+      const context = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const width = rect.width;
+      const height = rect.height;
+      context.clearRect(0, 0, width, height);
+      context.fillStyle = "#050606";
+      context.fillRect(0, 0, width, height);
+
+      const pad = { left: 54, right: 24, top: 28, bottom: 44 };
+      const plotWidth = width - pad.left - pad.right;
+      const plotHeight = height - pad.top - pad.bottom;
+      const finite = state.models.filter(model => isFiniteNumber(model.cost));
+      if (!finite.length) return;
+
+      const costs = finite.map(model => Math.log10(model.cost + 0.05));
+      const minCost = Math.min(...costs);
+      const maxCost = Math.max(...costs);
+      const minIntel = Math.min(70, ...finite.map(model => model.intel));
+      const maxIntel = Math.max(100, ...finite.map(model => model.intel));
+
+      context.strokeStyle = "rgba(244, 241, 232, .12)";
+      context.fillStyle = "rgba(244, 241, 232, .5)";
+      context.lineWidth = 1;
+      context.font = "12px ui-sans-serif, system-ui";
+
+      for (let i = 0; i <= 4; i += 1) {
+        const x = pad.left + (plotWidth * i / 4);
+        const y = pad.top + (plotHeight * i / 4);
+        context.beginPath();
+        context.moveTo(x, pad.top);
+        context.lineTo(x, pad.top + plotHeight);
+        context.moveTo(pad.left, y);
+        context.lineTo(pad.left + plotWidth, y);
+        context.stroke();
+      }
+
+      context.fillText("lower cost", pad.left, height - 16);
+      context.fillText("higher intelligence", 12, pad.top + 8);
+
+      const colors = {
+        OpenAI: "#5ad9a0",
+        Anthropic: "#e5b567",
+        Google: "#78a8ff",
+        xAI: "#ff6b5f",
+        Open: "#f4f1e8"
+      };
+
+      finite.forEach(model => {
+        const logCost = Math.log10(model.cost + 0.05);
+        const x = pad.left + ((logCost - minCost) / Math.max(.001, maxCost - minCost)) * plotWidth;
+        const y = pad.top + (1 - ((model.intel - minIntel) / Math.max(.001, maxIntel - minIntel))) * plotHeight;
+        const radius = clamp(4 + model.value / 24, 4, 10);
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fillStyle = colors[model.group] || "#a9aaa4";
+        context.globalAlpha = .9;
+        context.fill();
+        context.globalAlpha = 1;
+      });
+
+      finite
+        .sort((a, b) => b.intel - a.intel)
+        .slice(0, 6)
+        .forEach(model => {
+          const logCost = Math.log10(model.cost + 0.05);
+          const x = pad.left + ((logCost - minCost) / Math.max(.001, maxCost - minCost)) * plotWidth;
+          const y = pad.top + (1 - ((model.intel - minIntel) / Math.max(.001, maxIntel - minIntel))) * plotHeight;
+          context.fillStyle = "rgba(244, 241, 232, .82)";
+          context.fillText(model.name.slice(0, 18), clamp(x + 9, pad.left, width - 150), clamp(y + 4, 18, height - 22));
+        });
+    }
+
+    function renderAll() {
+      renderProviderFilters();
+      renderSummary();
+      renderSourceHealth();
+      renderRankings();
+      renderTable();
+      renderWatchlist();
+      requestAnimationFrame(drawMarketMap);
+    }
+
+    function renderError(error) {
+      const message = escapeHtml(error.message || "Unknown error");
+      const badge = document.getElementById("freshness-badge");
+      badge.className = "freshness-badge stale";
+      badge.textContent = "Data load failed";
+      document.getElementById("source-copy").textContent = "The generated ranking payload could not be loaded.";
+      document.getElementById("rank-list").innerHTML = `<div class="empty-state">Automated ranking data failed to load: ${message}</div>`;
+      document.getElementById("comparison-table").innerHTML = `<div class="empty-state">No comparison data available.</div>`;
+      document.getElementById("watch-list").innerHTML = `<div class="empty-state">No discovery data available.</div>`;
+      document.getElementById("footer-copy").textContent = "Ranking metadata unavailable.";
+    }
+
+    async function init() {
+      try {
+        const response = await fetch("data/rankings.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`rankings.json HTTP ${response.status}`);
+        const payload = await response.json();
+        state.payload = payload;
+        state.rankings = payload.rankings || state.rankings;
+        state.models = (payload.models || []).map(normalizeModel);
+        renderAll();
+      } catch (error) {
+        console.error("Failed to load automated ranking data", error);
+        renderError(error);
+      }
+    }
+
+    document.getElementById("view-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-view]");
+      if (!button) return;
+      state.view = button.dataset.view;
+      document.querySelectorAll("[data-view]").forEach(item => item.classList.toggle("active", item === button));
+      renderRankings();
+      renderTable();
+    });
+
+    document.getElementById("provider-filters").addEventListener("click", event => {
+      const button = event.target.closest("[data-provider]");
+      if (!button) return;
+      state.provider = button.dataset.provider;
+      renderProviderFilters();
+      renderRankings();
+      renderTable();
+    });
+
+    document.getElementById("model-search").addEventListener("input", event => {
+      state.search = event.target.value;
+      renderRankings();
+      renderTable();
+    });
+
+    window.addEventListener("resize", () => requestAnimationFrame(drawMarketMap));
     init();
   </script>
 </body>

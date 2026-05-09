@@ -12,6 +12,7 @@ The pipeline is intentionally source-first:
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import math
 import re
@@ -26,6 +27,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
+STALE_AFTER_HOURS = 24
+REVIEW_AFTER_HOURS = 168
+DISCOVERY_LIMIT = 12
 BENCHMARK_SOURCES = [
     {
         "id": "artificial-analysis",
@@ -46,6 +50,12 @@ BENCHMARK_SOURCES = [
         "type": "usage-community",
     },
 ]
+FRONTIER_PARAMETER_RE = re.compile(r"\b(?:[1-9]\d{2,}(?:\.\d+)?\s*B|[1-9](?:\.\d+)?\s*T)\b", re.I)
+FRONTIER_SIGNAL_RE = re.compile(
+    r"\b(frontier|flagship|reasoning|agentic|coding agent|foundation model|large language model)\b",
+    re.I,
+)
+FRONTIER_PROVIDERS = {"anthropic", "google", "openai", "x-ai"}
 
 
 def load_json(path: Path) -> Any:
@@ -54,7 +64,7 @@ def load_json(path: Path) -> Any:
 
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
 
 
 def fetch_json(url: str, timeout: int = 30) -> Any:
@@ -84,6 +94,15 @@ def format_context(tokens: int | None) -> str:
     return f"{round(tokens / 1000):g}K"
 
 
+def unix_to_iso(value: Any) -> str | None:
+    if value in (None, ""):
+        return None
+    try:
+        return datetime.fromtimestamp(int(value), tz=timezone.utc).replace(microsecond=0).isoformat()
+    except (TypeError, ValueError, OSError, OverflowError):
+        return None
+
+
 def extract_openrouter_model(openrouter_payload: dict[str, Any], openrouter_id: str) -> dict[str, Any] | None:
     by_id = {model.get("id"): model for model in openrouter_payload.get("data", [])}
     model = by_id.get(openrouter_id)
@@ -98,11 +117,13 @@ def extract_openrouter_model(openrouter_payload: dict[str, Any], openrouter_id: 
     return {
         "openrouter_id": model.get("id"),
         "openrouter_name": model.get("name"),
+        "canonical_slug": model.get("canonical_slug"),
         "context_length": model.get("context_length"),
         "input_per_million": input_cost,
         "output_per_million": output_cost,
         "blended_per_million": blended,
         "knowledge_cutoff": model.get("knowledge_cutoff"),
+        "created_at": unix_to_iso(model.get("created")),
         "sources": [
             {
                 "label": "OpenRouter",
@@ -152,7 +173,7 @@ def summarize_benchmark_page(html: str) -> str:
     if not html:
         return "No page content available; using curated benchmark seed scores."
     title_match = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
-    title = re.sub(r"\s+", " ", title_match.group(1)).strip() if title_match else "page fetched"
+    title = html_lib.unescape(re.sub(r"\s+", " ", title_match.group(1)).strip()) if title_match else "page fetched"
     return f"Fetched public page ({title}); no stable public score API assumed."
 
 
@@ -192,6 +213,8 @@ def enrich_candidates(
                     "output_per_million": live["output_per_million"],
                     "blended_per_million": live["blended_per_million"],
                     "knowledge_cutoff": live["knowledge_cutoff"],
+                    "created_at": live["created_at"],
+                    "canonical_slug": live["canonical_slug"],
                 }
             )
             model["sources"] = live["sources"] + model["sources"]
@@ -203,8 +226,10 @@ def enrich_candidates(
                     "context": "Unknown",
                     "input_per_million": None,
                     "output_per_million": None,
-                    "blended_per_million": math.inf,
+                    "blended_per_million": None,
                     "knowledge_cutoff": None,
+                    "created_at": None,
+                    "canonical_slug": None,
                 }
             )
             model["sources"].insert(
@@ -224,16 +249,23 @@ def compute_rankings(models: list[dict[str, Any]]) -> dict[str, Any]:
         value = model.get("blended_per_million")
         return float(value) if value is not None else math.inf
 
+    value_candidates = [
+        model
+        for model in models
+        if model["intelligence"] >= 83 and math.isfinite(cost(model))
+    ]
     ranked_by_value_raw = {
         model["id"]: model["intelligence"] / max(cost(model), 0.05)
-        for model in models
-        if math.isfinite(cost(model))
+        for model in value_candidates
     }
     max_value = max(ranked_by_value_raw.values(), default=1)
-    value_index = {
-        model_id: int(round(raw / max_value * 100))
-        for model_id, raw in ranked_by_value_raw.items()
-    }
+    value_index = {model["id"]: 0 for model in models}
+    value_index.update(
+        {
+            model_id: int(round(raw / max_value * 100))
+            for model_id, raw in ranked_by_value_raw.items()
+        }
+    )
     for model in models:
         model["value_index"] = value_index.get(model["id"], 0)
 
@@ -242,7 +274,7 @@ def compute_rankings(models: list[dict[str, Any]]) -> dict[str, Any]:
         "value": [
             m["id"]
             for m in sorted(
-                [m for m in models if m["intelligence"] >= 83 and math.isfinite(cost(m))],
+                value_candidates,
                 key=lambda m: (m["value_index"], m["intelligence"]),
                 reverse=True,
             )[:6]
@@ -252,15 +284,136 @@ def compute_rankings(models: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def openrouter_payload_from_rankings(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    rankings_payload = load_json(path)
+    models = []
+    for model in rankings_payload.get("models", []):
+        openrouter_id = model.get("openrouter_id")
+        if not openrouter_id:
+            continue
+        input_cost = model.get("input_per_million")
+        output_cost = model.get("output_per_million")
+        models.append(
+            {
+                "id": openrouter_id,
+                "canonical_slug": model.get("canonical_slug") or openrouter_id,
+                "name": model.get("openrouter_name") or model.get("name"),
+                "context_length": model.get("context_length"),
+                "pricing": {
+                    "prompt": "" if input_cost is None else str(float(input_cost) / 1_000_000),
+                    "completion": "" if output_cost is None else str(float(output_cost) / 1_000_000),
+                },
+                "knowledge_cutoff": model.get("knowledge_cutoff"),
+                "created": None,
+            }
+        )
+    if not models:
+        return None
+    return {
+        "data": models,
+        "_fallback_from_rankings": {
+            "path": str(path),
+            "generated_at": rankings_payload.get("generated_at"),
+        },
+    }
+
+
+def load_openrouter_payload(cache_dir: Path, offline: bool) -> tuple[dict[str, Any], dict[str, Any]]:
+    openrouter_cache = cache_dir / "openrouter-models.json"
+    if offline and openrouter_cache.exists():
+        payload = load_json(openrouter_cache)
+        return payload, {
+            "status": "cached",
+            "notes": f"{len(payload.get('data', []))} models loaded from local OpenRouter cache.",
+        }
+    if offline:
+        fallback = openrouter_payload_from_rankings(DATA_DIR / "rankings.json")
+        if fallback:
+            fallback_info = fallback.get("_fallback_from_rankings", {})
+            return fallback, {
+                "status": "from-generated",
+                "notes": (
+                    f"{len(fallback.get('data', []))} models reconstructed from committed rankings "
+                    f"generated at {fallback_info.get('generated_at') or 'unknown time'}."
+                ),
+            }
+        raise FileNotFoundError(
+            f"Offline mode needs {openrouter_cache} or {DATA_DIR / 'rankings.json'}; "
+            "run without --offline once to refresh the cache."
+        )
+
+    payload = fetch_json(OPENROUTER_MODELS_URL)
+    write_json(openrouter_cache, payload)
+    return payload, {
+        "status": "fetched",
+        "notes": f"{len(payload.get('data', []))} models available in API payload.",
+    }
+
+
+def summarize_openrouter_model(model: dict[str, Any]) -> dict[str, Any]:
+    pricing = model.get("pricing") or {}
+    input_cost = dollars_per_million(pricing.get("prompt"))
+    output_cost = dollars_per_million(pricing.get("completion"))
+    blended = None
+    if input_cost is not None and output_cost is not None:
+        blended = round(input_cost + output_cost, 6)
+    openrouter_id = model.get("id") or ""
+    return {
+        "id": openrouter_id,
+        "name": model.get("name") or openrouter_id,
+        "created_at": unix_to_iso(model.get("created")),
+        "context_length": model.get("context_length"),
+        "context": format_context(model.get("context_length")),
+        "input_per_million": input_cost,
+        "output_per_million": output_cost,
+        "blended_per_million": blended,
+        "url": f"https://openrouter.ai/{openrouter_id}" if openrouter_id else None,
+    }
+
+
+def is_frontier_discovery(model: dict[str, Any]) -> bool:
+    openrouter_id = model.get("id") or ""
+    provider = openrouter_id.split("/", 1)[0]
+    text = " ".join(
+        str(model.get(key) or "")
+        for key in ("id", "name", "description")
+    )
+    return bool(
+        FRONTIER_PARAMETER_RE.search(text)
+        or (provider in FRONTIER_PROVIDERS and FRONTIER_SIGNAL_RE.search(text))
+    )
+
+
+def build_catalog_metadata(openrouter_payload: dict[str, Any], candidates: list[dict[str, Any]]) -> dict[str, Any]:
+    openrouter_models = [
+        model
+        for model in openrouter_payload.get("data", [])
+        if model.get("id")
+    ]
+    sorted_models = sorted(openrouter_models, key=lambda model: int(model.get("created") or 0), reverse=True)
+    candidate_openrouter_ids = {candidate["openrouter_id"] for candidate in candidates}
+    discovery_alerts = [
+        summarize_openrouter_model(model)
+        for model in sorted_models
+        if model.get("id") not in candidate_openrouter_ids and is_frontier_discovery(model)
+    ][:DISCOVERY_LIMIT]
+    return {
+        "openrouter_model_count": len(openrouter_models),
+        "ranked_candidate_count": len(candidates),
+        "latest_openrouter_models": [
+            summarize_openrouter_model(model)
+            for model in sorted_models[:DISCOVERY_LIMIT]
+        ],
+        "discovery_alerts": discovery_alerts,
+    }
+
+
 def build_payload(candidates_path: Path, offline: bool = False) -> dict[str, Any]:
     candidates = load_json(candidates_path)
     cache_dir = DATA_DIR / ".cache"
-    openrouter_cache = cache_dir / "openrouter-models.json"
-    if offline and openrouter_cache.exists():
-        openrouter_payload = load_json(openrouter_cache)
-    else:
-        openrouter_payload = fetch_json(OPENROUTER_MODELS_URL)
-        write_json(openrouter_cache, openrouter_payload)
+    openrouter_payload, openrouter_status = load_openrouter_payload(cache_dir, offline=offline)
     benchmark_signals, benchmark_statuses = collect_benchmark_signals(cache_dir, offline=offline)
     models = enrich_candidates(candidates, openrouter_payload, benchmark_signals)
     rankings = compute_rankings(models)
@@ -278,12 +431,17 @@ def build_payload(candidates_path: Path, offline: bool = False) -> dict[str, Any
                 "label": "OpenRouter model/pricing API",
                 "url": OPENROUTER_MODELS_URL,
                 "type": "pricing",
-                "status": "fetched" if not offline else "cached",
+                "status": openrouter_status["status"],
                 "fetched_at": now_iso(),
-                "notes": f"{len(openrouter_payload.get('data', []))} models available in API payload.",
+                "notes": openrouter_status["notes"],
             },
             *benchmark_statuses,
         ],
+        "freshness_policy": {
+            "stale_after_hours": STALE_AFTER_HOURS,
+            "review_after_hours": REVIEW_AFTER_HOURS,
+        },
+        "catalog": build_catalog_metadata(openrouter_payload, candidates),
         "models": models,
         "rankings": rankings,
     }

@@ -1,0 +1,35 @@
+name: Refresh rankings
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Regenerate ranking payload from live sources
+        run: python scripts/ingest_rankings.py
+      - name: Validate fresh ranking payload
+        run: python scripts/validate_rankings.py data/rankings.json --max-age-hours 6
+      - name: Commit refreshed data
+        run: |
+          if git diff --quiet data/rankings.json; then
+            echo "Ranking payload already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rankings.json
+          git commit -m "Update ranking data"
+          git push
